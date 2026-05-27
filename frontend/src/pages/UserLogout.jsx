@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { notyf } from '../utils/notyf'
 
 export const UserLogout = () => {
 
@@ -14,8 +15,11 @@ export const UserLogout = () => {
     }).then((response) => {
         if (response.status === 200) {
             localStorage.removeItem('token')
+            notyf.success('Logged out successfully')
             navigate('/login')
         }
+    }).catch((error) => {
+        notyf.error(error.response?.data?.message || 'Logout failed')
     })
 
     return (

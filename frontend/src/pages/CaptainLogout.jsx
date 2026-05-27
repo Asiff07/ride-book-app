@@ -2,6 +2,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { notyf } from '../utils/notyf'
 
 export const CaptainLogout = () => {
     const token = localStorage.getItem('captain-token')
@@ -14,8 +15,11 @@ export const CaptainLogout = () => {
     }).then((response) => {
         if (response.status === 200) {
             localStorage.removeItem('captain-token')
+            notyf.success('Captain logged out successfully')
             navigate('/captain-login')
         }
+    }).catch((error) => {
+        notyf.error(error.response?.data?.message || 'Logout failed')
     })
 
     return (

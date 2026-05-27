@@ -2,15 +2,15 @@ import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { UserDataContext } from '../context/UserContext'
-
+import { notyf } from '../utils/notyf'
 
 
 const UserSignup = () => {
-  const [ email, setEmail ] = useState('')
-  const [ password, setPassword ] = useState('')
-  const [ firstName, setFirstName ] = useState('')
-  const [ lastName, setLastName ] = useState('')
-  const [ userData, setUserData ] = useState({})
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [userData, setUserData] = useState({})
 
   const navigate = useNavigate()
 
@@ -32,15 +32,19 @@ const UserSignup = () => {
       password: password
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
 
-    if (response.status === 201) {
-      const data = response.data
-      setUser(data.user)
-      localStorage.setItem('token', data.token)
-      navigate('/home')
+      if (response.status === 201) {
+        const data = response.data
+        setUser(data.user)
+        localStorage.setItem('token', data.token)
+        notyf.success('Signup Successful')
+        navigate('/home')
+      }
+    } catch (error) {
+      notyf.error(error.response?.data?.message || 'Signup Failed')
     }
-
 
     setEmail('')
     setFirstName('')
@@ -50,9 +54,9 @@ const UserSignup = () => {
   }
   return (
     <div>
-      <div className='p-7 h-screen flex flex-col justify-between'>
+      <div className='p-7 h-screen flex flex-col justify-between items-center'>
         <div>
-          <img className='w-16 mb-10' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s" alt="" />
+          <img className='w-56' src="/drivo_black.png" alt="" />
 
           <form onSubmit={(e) => {
             submitHandler(e)

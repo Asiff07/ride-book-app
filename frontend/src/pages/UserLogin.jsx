@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 import { UserDataContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { notyf } from '../utils/notyf'
 
 const UserLogin = () => {
-  const [ email, setEmail ] = useState('')
-  const [ password, setPassword ] = useState('')
-  const [ userData, setUserData ] = useState({})
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [userData, setUserData] = useState({})
 
   const { user, setUser } = useContext(UserDataContext)
   const navigate = useNavigate()
@@ -22,29 +23,33 @@ const UserLogin = () => {
       password: password
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
 
-    if (response.status === 200) {
-      const data = response.data
-      setUser(data.user)
-      localStorage.setItem('token', data.token)
-      navigate('/home')
+      if (response.status === 200) {
+        const data = response.data
+        setUser(data.user)
+        localStorage.setItem('token', data.token)
+        notyf.success('Login Successful')
+        navigate('/home')
+      }
+    } catch (error) {
+      notyf.error(error.response?.data?.message || 'Login Failed')
     }
-
 
     setEmail('')
     setPassword('')
   }
 
   return (
-    <div className='p-7 h-screen flex flex-col justify-between'>
+    <div className='p-7 h-screen flex flex-col justify-between items-center'>
       <div>
-        <img className='w-16 mb-10' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s" alt="" />
+        <img className='w-56 mb-10' src="/drivo_black.png" alt="" />
 
         <form onSubmit={(e) => {
           submitHandler(e)
         }}>
-          <h3 className='text-lg font-medium mb-2'>What's your email</h3>
+          <h3 className='text-lg font-medium mb-2'>Enter your email</h3>
           <input
             required
             value={email}

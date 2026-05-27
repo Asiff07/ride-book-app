@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const ConfirmRidePopUp = (props) => {
-    const [ otp, setOtp ] = useState('')
+    const [otp, setOtp] = useState('')
     const navigate = useNavigate()
 
     const submitHander = async (e) => {
@@ -16,7 +16,7 @@ const ConfirmRidePopUp = (props) => {
                 otp: otp
             },
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('captain-token')}`
             }
         })
 

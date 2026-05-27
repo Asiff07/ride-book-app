@@ -1,7 +1,7 @@
 const rideService = require('../services/ride.service');
 const { validationResult } = require('express-validator');
 const mapService = require('../services/maps.service');
-const { sendMessageToSocketId } = require('../socket');
+const { sendMessageToUser } = require('../socket');
 const rideModel = require('../models/ride.model');
 
 
@@ -18,22 +18,21 @@ module.exports.createRide = async (req, res) => {
         res.status(201).json(ride);
 
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
+        console.log('📍 Pickup coordinates:', pickupCoordinates);
 
-
-
-        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 2);
+        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 100);
+        console.log(`👨‍✈️ Captains found in radius: ${captainsInRadius.length}`);
 
         ride.otp = ""
 
         const rideWithUser = await rideModel.findOne({ _id: ride._id }).populate('user');
 
         captainsInRadius.map(captain => {
-
-            sendMessageToSocketId(captain.socketId, {
+            console.log(`📡 Emitting new-ride to captain: ${captain._id}`);
+            sendMessageToUser(captain._id, {
                 event: 'new-ride',
                 data: rideWithUser
             })
-
         })
 
     } catch (err) {
@@ -71,7 +70,9 @@ module.exports.confirmRide = async (req, res) => {
     try {
         const ride = await rideService.confirmRide({ rideId, captain: req.captain });
 
-        sendMessageToSocketId(ride.user.socketId, {
+        console.log('🚗 Ride confirmed! Sending ride-confirmed to user:', ride.user._id);
+
+        sendMessageToUser(ride.user._id, {
             event: 'ride-confirmed',
             data: ride
         })
@@ -97,7 +98,7 @@ module.exports.startRide = async (req, res) => {
 
         console.log(ride);
 
-        sendMessageToSocketId(ride.user.socketId, {
+        sendMessageToUser(ride.user._id, {
             event: 'ride-started',
             data: ride
         })
@@ -119,15 +120,13 @@ module.exports.endRide = async (req, res) => {
     try {
         const ride = await rideService.endRide({ rideId, captain: req.captain });
 
-        sendMessageToSocketId(ride.user.socketId, {
+        sendMessageToUser(ride.user._id, {
             event: 'ride-ended',
             data: ride
         })
 
-
-
         return res.status(200).json(ride);
     } catch (err) {
         return res.status(500).json({ message: err.message });
-    } s
+    }
 }
