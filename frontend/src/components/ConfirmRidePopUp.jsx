@@ -10,23 +10,25 @@ const ConfirmRidePopUp = (props) => {
     const submitHander = async (e) => {
         e.preventDefault()
 
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
-            params: {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
                 rideId: props.ride._id,
                 otp: otp
-            },
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('captain-token')}`
+                }
+            })
+
+            if (response.status === 200) {
+                props.setConfirmRidePopupPanel(false)
+                props.setRidePopupPanel(false)
+                navigate('/captain-riding', { state: { ride: response.data || props.ride } })
             }
-        })
-
-        if (response.status === 200) {
-            props.setConfirmRidePopupPanel(false)
-            props.setRidePopupPanel(false)
-            navigate('/captain-riding', { state: { ride: props.ride } })
+        } catch (error) {
+            console.error('Error starting ride:', error)
+            alert(error.response?.data?.message || 'Failed to start ride. Please check the OTP and try again.')
         }
-
-
     }
     return (
         <div>

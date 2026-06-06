@@ -195,34 +195,43 @@ const Home = () => {
 
 
     async function findTrip() {
-        setVehiclePanel(true)
-        setPanelOpen(false)
+        try {
+            setVehiclePanel(true)
+            setPanelOpen(false)
 
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-            params: { pickup, destination },
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+                params: { pickup, destination },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
-
-        setFare(response.data)
-
-
+            setFare(response.data)
+        } catch (error) {
+            console.error('Error finding trip:', error)
+            alert(error.response?.data?.message || 'Failed to fetch fare options. Please try again.')
+            setVehiclePanel(false)
+            setPanelOpen(true)
+        }
     }
 
     async function createRide() {
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
-            pickup,
-            destination,
-            vehicleType
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-
-
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+                pickup,
+                destination,
+                vehicleType
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+        } catch (error) {
+            console.error('Error creating ride:', error)
+            alert(error.response?.data?.message || 'Failed to create ride. Please try again.')
+            setVehicleFound(false)
+            setConfirmRidePanel(true)
+        }
     }
 
     const handleWheelOnPanel = (e) => {

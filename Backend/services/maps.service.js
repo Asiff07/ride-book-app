@@ -102,27 +102,17 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 }
 
 module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
-
-    // radius in km — Haversine formula (no 2dsphere index required)
     const captains = await captainModel.find({
-        'location.ltd': { $exists: true, $ne: null },
-        'location.lng': { $exists: true, $ne: null }
+        location: {
+            $nearSphere: {
+                $geometry: {
+                    type: 'Point',
+                    coordinates: [ parseFloat(lng), parseFloat(ltd) ]
+                },
+                $maxDistance: radius * 1000 // Convert km to meters
+            }
+        }
     });
 
-    const toRad = (deg) => deg * (Math.PI / 180);
-
-    const nearbyCaptains = captains.filter(captain => {
-        const R = 6371;
-        const dLat = toRad(captain.location.ltd - ltd);
-        const dLng = toRad(captain.location.lng - lng);
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(ltd)) * Math.cos(toRad(captain.location.ltd)) *
-            Math.sin(dLng / 2) * Math.sin(dLng / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
-        return distance <= radius;
-    });
-
-    return nearbyCaptains;
+    return captains;
 }

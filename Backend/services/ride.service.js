@@ -129,6 +129,8 @@ module.exports.startRide = async ({ rideId, otp, captain }) => {
         status: 'ongoing'
     })
 
+    ride.status = 'ongoing';
+
     return ride;
 }
 
@@ -155,6 +157,8 @@ module.exports.endRide = async ({ rideId, captain }) => {
     }, {
         status: 'completed'
     })
+
+    ride.status = 'completed';
 
     return ride;
 }
