@@ -45,40 +45,38 @@ const ConfirmRidePopUp = (props) => {
             </div>
             <div className='flex gap-2 justify-between flex-col items-center'>
                 <div className='w-full mt-5'>
-                    <div className='flex items-center gap-5 p-3 border-b-2'>
-                        <i className="ri-map-pin-user-fill"></i>
+                    <div className='flex items-center gap-5 p-3 border-b'>
+                        <i className="text-xl text-gray-700 ri-map-pin-user-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup}</p>
+                            <h3 className='text-xs font-semibold text-gray-400 uppercase tracking-wider'>Pickup Location</h3>
+                            <p className='text-base font-medium text-gray-800 mt-0.5'>{props.ride?.pickup}</p>
                         </div>
                     </div>
-                    <div className='flex items-center gap-5 p-3 border-b-2'>
-                        <i className="text-lg ri-map-pin-2-fill"></i>
+                    <div className='flex items-center gap-5 p-3 border-b'>
+                        <i className="text-xl text-gray-700 ri-map-pin-2-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination}</p>
+                            <h3 className='text-xs font-semibold text-gray-400 uppercase tracking-wider'>Destination</h3>
+                            <p className='text-base font-medium text-gray-800 mt-0.5'>{props.ride?.destination}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3'>
-                        <i className="ri-currency-line"></i>
+                        <i className="text-xl text-gray-700 ri-currency-line"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>₹{props.ride?.fare} </h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
+                            <h3 className='text-xs font-semibold text-gray-400 uppercase tracking-wider'>Fare</h3>
+                            <p className='text-base font-bold text-gray-800 mt-0.5'>₹{props.ride?.fare}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className='mt-6 w-full'>
                     <form onSubmit={submitHander}>
-                        <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
+                        <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-gray-50 border border-gray-200 focus:bg-white focus:border-black outline-none transition-all px-6 py-4 font-mono text-center text-lg rounded-xl w-full mt-3 tracking-widest' placeholder='Enter OTP' />
 
-                        <button className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
-                        <button onClick={() => {
+                        <button type="submit" className='w-full mt-5 text-base flex justify-center bg-green-600 hover:bg-green-700 active:scale-[0.98] text-white font-semibold p-3.5 rounded-xl transition-all shadow-md'>Confirm</button>
+                        <button type="button" onClick={() => {
                             props.setConfirmRidePopupPanel(false)
                             props.setRidePopupPanel(false)
-
-                        }} className='w-full mt-2 bg-red-600 text-lg text-white font-semibold p-3 rounded-lg'>Cancel</button>
-
+                        }} className='w-full mt-2 bg-red-600 hover:bg-red-700 active:scale-[0.98] text-base text-white font-semibold p-3.5 rounded-xl transition-all shadow-md'>Cancel</button>
                     </form>
                 </div>
             </div>

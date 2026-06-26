@@ -42,49 +42,53 @@ const UserLogin = () => {
   }
 
   return (
-    <div className='p-7 h-screen flex flex-col justify-between items-center'>
-      <div>
-        <img className='w-56 mb-10' src="/drivo_black.png" alt="" />
+    <div className='w-full min-h-screen py-8 px-6 flex flex-col justify-between bg-white overflow-y-auto'>
+      <div className='w-full max-w-md mx-auto flex-1 flex flex-col justify-center'>
+        <div className="flex justify-start mb-8">
+          <img className='w-28' src="/drivo_black.png" alt="Drivo" />
+        </div>
 
-        <form onSubmit={(e) => {
-          submitHandler(e)
-        }}>
-          <h3 className='text-lg font-medium mb-2'>Enter your email</h3>
+        <form onSubmit={submitHandler} className="w-full">
+          <h3 className='text-lg font-semibold text-gray-800 mb-2'>Enter your email</h3>
           <input
             required
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+            onChange={(e) => setEmail(e.target.value)}
+            className='bg-gray-50 border border-gray-200 focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-all rounded-xl px-4 py-3 w-full text-base placeholder:text-gray-400 mb-5'
             type="email"
             placeholder='email@example.com'
           />
 
-          <h3 className='text-lg font-medium mb-2'>Enter Password</h3>
-
+          <h3 className='text-lg font-semibold text-gray-800 mb-2'>Enter Password</h3>
           <input
-            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-            required type="password"
-            placeholder='password'
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className='bg-gray-50 border border-gray-200 focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-all rounded-xl px-4 py-3 w-full text-base placeholder:text-gray-400 mb-6'
+            type="password"
+            placeholder='••••••••'
           />
 
           <button
-            className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
-          >Login</button>
-
+            type="submit"
+            className='bg-black text-white font-medium py-3.5 rounded-xl w-full text-base transition-all hover:bg-gray-900 active:scale-[0.98] shadow-sm mb-4'
+          >
+            Login
+          </button>
         </form>
-        <p className='text-center'>New here? <Link to='/signup' className='text-blue-600'>Create new Account</Link></p>
+        
+        <p className='text-center text-sm text-gray-600 mt-2'>
+          New here? <Link to='/signup' className='text-blue-600 hover:underline font-medium'>Create new Account</Link>
+        </p>
       </div>
-      <div>
+
+      <div className='w-full max-w-md mx-auto mt-8'>
         <Link
           to='/captain-login'
-          className='bg-[#10b461] flex items-center justify-center text-white font-semibold mb-5 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
-        >Sign in as Captain</Link>
+          className='bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl w-full text-base flex items-center justify-center transition-all active:scale-[0.98] shadow-sm'
+        >
+          Sign in as Captain
+        </Link>
       </div>
     </div>
   )

@@ -10,7 +10,7 @@ const CaptainRiding = () => {
     const [finishRidePanel, setFinishRidePanel] = useState(false)
     const finishRidePanelRef = useRef(null)
     const mapContainerRef = useRef(null)
-    const mapHeightRef = useRef(80) // start at 80vh
+    const mapHeightRef = useRef(70) // start at 70vh for responsive spacing
     const touchStartYRef = useRef(null)
     const location = useLocation()
     const rideData = location.state?.ride
@@ -55,17 +55,19 @@ const CaptainRiding = () => {
     }
 
     return (
-        <div className='h-screen relative overflow-hidden flex flex-col'>
+        <div className='h-screen relative overflow-hidden flex flex-col bg-white'>
 
-            <div className='fixed p-6 top-0 flex items-center justify-between w-screen z-10'>
-                <img className='w-16' src="/drivo_captain.png" alt="" />
-                <Link to='/captain-home' className=' h-10 w-10 bg-white flex items-center justify-center rounded-full'>
-                    <i className="text-lg font-medium ri-logout-box-r-line"></i>
+            <div className='fixed p-6 top-0 flex items-center justify-between w-screen z-10 pointer-events-none'>
+                <div className='bg-white/95 backdrop-blur-md p-2.5 px-3.5 rounded-full shadow-md flex items-center justify-center h-10 w-24 pointer-events-auto'>
+                    <img className='w-16 object-contain' src="/drivo_captain.png" alt="Drivo Captain" />
+                </div>
+                <Link to='/captain/logout' className='h-10 w-10 bg-white/95 backdrop-blur-md flex items-center justify-center rounded-full shadow-md pointer-events-auto hover:bg-gray-50 active:scale-95 transition-all'>
+                    <i className="text-lg font-semibold text-gray-800 ri-logout-box-r-line"></i>
                 </Link>
             </div>
 
             {/* Map */}
-            <div ref={mapContainerRef} style={{ height: '80vh' }} className='w-screen'>
+            <div ref={mapContainerRef} style={{ height: '70vh' }} className='w-screen'>
                 <LiveTracking />
             </div>
 
@@ -75,19 +77,24 @@ const CaptainRiding = () => {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                className='flex-1 bg-yellow-400 flex flex-col'
+                className='flex-1 bg-white shadow-[0_-8px_30px_rgb(0,0,0,0.08)] rounded-t-3xl flex flex-col justify-between pb-8 relative z-20 cursor-pointer'
                 onClick={() => setFinishRidePanel(true)}
             >
-                <div className='w-12 h-1.5 bg-yellow-600 rounded-full mx-auto mt-3 mb-1 cursor-grab'
+                <div className='w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 cursor-grab'
                     onClick={e => e.stopPropagation()}
                 ></div>
-                <div className='p-6 flex items-center justify-between'>
-                    <h4 className='text-xl font-semibold'>{'4 KM away'}</h4>
-                    <button className=' bg-green-600 text-white font-semibold p-3 px-10 rounded-lg'>Complete Ride</button>
+                <div className='p-6 flex items-center justify-between flex-1'>
+                    <div className="text-left">
+                        <h4 className='text-xl font-bold text-gray-900'>Ongoing Ride</h4>
+                        <p className='text-sm text-gray-500 mt-0.5'>Heading to destination</p>
+                    </div>
+                    <button className='bg-green-600 hover:bg-green-700 active:scale-95 transition-all text-white font-semibold py-3 px-8 rounded-xl shadow-md'>
+                        Complete Ride
+                    </button>
                 </div>
             </div>
 
-            <div ref={finishRidePanelRef} className='fixed w-full z-[500] bottom-0 translate-y-full bg-white px-3 py-10 pt-12 max-h-screen overflow-y-auto'>
+            <div ref={finishRidePanelRef} className='fixed w-full z-[500] bottom-0 translate-y-full bg-white px-3 py-8 pt-10 max-h-screen overflow-y-auto shadow-[0_-8px_30px_rgb(0,0,0,0.12)] rounded-t-3xl'>
                 <FinishRide
                     ride={rideData}
                     setFinishRidePanel={setFinishRidePanel} />
